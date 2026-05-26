@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Customer Complaint Registration | ₹2 Fee + UPI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #e9eef3 0%, #dbe1e8 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* main card */
+    .form-container {
+      max-width: 580px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 2rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    /* header */
+    .form-header {
+      background: #1e2a3e;
+      padding: 1.8rem 2rem;
+      color: white;
+    }
+
+    .form-header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .form-header h1::before {
+      content: "📋";
+      font-size: 1.8rem;
+    }
+
+    .form-header p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .fee-badge {
+      display: inline-block;
+      background: #ffb347;
+      color: #2d2a1f;
+      font-weight: 600;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      margin-top: 0.7rem;
+    }
+
+    /* form area */
+    .form-body {
+      padding: 2rem 2rem 1.8rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-group label {
+      font-weight: 600;
+      color: #1f2a3e;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .required-star {
+      color: #e53e3e;
+      font-size: 1.1rem;
+    }
+
+    input, textarea {
+      padding: 0.9rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 1rem;
+      font-size: 1rem;
+      transition: all 0.2s;
+      background: #fefefe;
+      outline: none;
+      width: 100%;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 85px;
+    }
+
+    /* payment section */
+    .payment-section {
+      background: #f8fafc;
+      border-radius: 1.2rem;
+      padding: 1.2rem 1.2rem;
+      margin: 1.5rem 0 1.8rem;
+      border: 1px solid #e2edf2;
+    }
+
+    .payment-title {
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .upi-pin-group {
+      margin-top: 0.8rem;
+    }
+
+    .upi-pin-group input {
+      background: white;
+      letter-spacing: 2px;
+      font-size: 1.1rem;
+    }
+
+    .rupee-note {
+      background: #eef2ff;
+      padding: 0.6rem 1rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      color: #1e40af;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    /* submit button */
+    .submit-btn {
+      width: 100%;
+      background: #0f3b2c;
+      background: linear-gradient(95deg, #0a2f24, #146b46);
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 3rem;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(95deg, #0f4636, #1a825a);
+      transform: scale(0.99);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* status message */
+    .status-message {
+      margin-top: 1.2rem;
+      padding: 0.8rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      text-align: center;
+      display: none;
+      background: #f1f5f9;
+    }
+
+    .status-message.show {
+      display: block;
+    }
+
+    .error-msg {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #dc2626;
+    }
+
+    .success-msg {
+      background: #dcfce7;
+      color: #166534;
+      border-left: 4px solid #16a34a;
+    }
+
+    .info-msg {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .hint-text {
+      font-size: 0.7rem;
+      color: #5b6e8c;
+      margin-top: 0.3rem;
+    }
+
+    @media (max-width: 480px) {
+      .form-body {
+        padding: 1.5rem;
+      }
+      .form-header {
+        padding: 1.2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="form-container">
+  <div class="form-header">
+    <h1>Customer Complaint Portal</h1>
+    <p>Register your issue — official support channel</p>
+    <div class="fee-badge">⚡ Registration Fee: ₹2 (UPI)</div>
+  </div>
+  <div class="form-body">
+    <!-- Personal details -->
+    <div class="input-group">
+      <label>Full Name <span class="required-star">*</span></label>
+      <input type="text" id="fullName" placeholder="e.g. Rajesh Sharma" autocomplete="name">
+    </div>
+
+    <div class="input-group">
+      <label>Mobile Number <span class="required-star">*</span></label>
+      <input type="tel" id="mobileNo" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" autocomplete="tel">
+    </div>
+
+    <div class="input-group">
+      <label>Complete Address <span class="required-star">*</span></label>
+      <textarea id="address" placeholder="Street, city, landmark, pincode ..."></textarea>
+    </div>
+
+    <!-- Payment block -->
+    <div class="payment-section">
+      <div class="payment-title">
+        <span>💰</span> Payment details (₹2 registration charges)
+      </div>
+      <div class="rupee-note">
+        🔒 ₹2 will be collected via UPI to complete complaint registration.
+      </div>
+      <div class="input-group upi-pin-group">
+        <label>Enter UPI PIN <span class="required-star">*</span></label>
+        <input type="password" id="upiPin" placeholder="••••••" maxlength="6" inputmode="numeric" autocomplete="off">
+      </div>
+    </div>
+
+    <button class="submit-btn" id="submitComplaintBtn">
+      <span>🔐</span> Pay ₹2 & Register Complaint
+    </button>
+
+    <div id="statusBox" class="status-message"></div>
+    <div class="hint-text" style="text-align: center; margin-top: 1rem;">
+      ✅ After payment, complaint ID will be generated.
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // DOM elements
+    const nameInput = document.getElementById('fullName');
+    const mobileInput = document.getElementById('mobileNo');
+    const addressInput = document.getElementById('address');
+    const upiPinInput = document.getElementById('upiPin');
+    const submitBtn = document.getElementById('submitComplaintBtn');
+    const statusDiv = document.getElementById('statusBox');
+
+    // Helper to show message
+    function showMessage(msg, type = 'error') {
+      statusDiv.textContent = msg;
+      statusDiv.className = `status-message show ${type === 'error' ? 'error-msg' : (type === 'success' ? 'success-msg' : 'info-msg')}`;
+      if (type === 'success') {
+        setTimeout(() => {
+          if (statusDiv.textContent === msg && statusDiv.classList.contains('success-msg')) {
+            statusDiv.classList.remove('show');
+          }
+        }, 4500);
+      } else if (type === 'info') {
+        setTimeout(() => {
+          if (statusDiv.textContent === msg && statusDiv.classList.contains('info-msg')) {
+            statusDiv.classList.remove('show');
+          }
+        }, 3500);
+      }
+    }
+
+    // Reset field borders
+    function resetFieldStyles() {
+      [nameInput, mobileInput, addressInput, upiPinInput].forEach(field => {
+        field.style.borderColor = '';
+      });
+    }
+
+    // Form validation
+    function validateForm() {
+      resetFieldStyles();
+
+      const fullName = nameInput.value.trim();
+      if (fullName === "") {
+        nameInput.style.borderColor = "#dc2626";
+        showMessage("❌ Please enter your full name.", "error");
+        nameInput.focus();
+        return false;
+      }
+      if (fullName.length < 2) {
+        nameInput.style.borderColor = "#dc2626";
+        showMessage("❌ Name must be at least 2 characters.", "error");
+        nameInput.focus();
+        return false;
+      }
+
+      const mobile = mobileInput.value.trim();
+      const mobileRegex = /^[6-9]\d{9}$/;
+      if (!mobileRegex.test(mobile)) {
+        mobileInput.style.borderColor = "#dc2626";
+        showMessage("❌ Enter a valid 10-digit mobile number (starting 6-9).", "error");
+        mobileInput.focus();
+        return false;
+      }
+
+      const address = addressInput.value.trim();
+      if (address === "") {
+        addressInput.style.borderColor = "#dc2626";
+        showMessage("❌ Address cannot be empty. Please provide your complete address.", "error");
+        addressInput.focus();
+        return false;
+      }
+      if (address.length < 5) {
+        addressInput.style.borderColor = "#dc2626";
+        showMessage("❌ Address is too short. Please provide detailed address.", "error");
+        addressInput.focus();
+        return false;
+      }
+
+      const upiPin = upiPinInput.value.trim();
+      if (upiPin === "") {
+        upiPinInput.style.borderColor = "#dc2626";
+        showMessage("❌ UPI PIN is required to process ₹2 payment.", "error");
+        upiPinInput.focus();
+        return false;
+      }
+      if (!/^\d{4,6}$/.test(upiPin)) {
+        upiPinInput.style.borderColor = "#dc2626";
+        showMessage("❌ UPI PIN must be 4 to 6 digits (numbers only).", "error");
+        upiPinInput.focus();
+        return false;
+      }
+
+      return true;
+    }
+
+    // Simulate payment + registration (no demo text)
+    async function processPaymentAndRegister(complaintData) {
+      return new Promise((resolve, reject) => {
+        const upiPinValue = complaintData.upiPin;
+        if (upiPinValue && /^\d{4,6}$/.test(upiPinValue)) {
+          setTimeout(() => {
+            const complaintId = `CMP-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+            resolve({ success: true, complaintId, message: "Payment of ₹2 successful! Complaint registered." });
+          }, 1200);
+        } else {
+          reject({ success: false, message: "UPI PIN verification failed. Payment declined." });
+        }
+      });
+    }
+
+    // Main submit handler
+    async function handleSubmit(event) {
+      if (submitBtn.disabled) return;
+      
+      if (!validateForm()) {
+        return;
+      }
+
+      const customerData = {
+        fullName: nameInput.value.trim(),
+        mobile: mobileInput.value.trim(),
+        address: addressInput.value.trim(),
+        upiPin: upiPinInput.value.trim(),
+        registeredAt: new Date().toISOString()
+      };
+
+      submitBtn.disabled = true;
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML = `<span>⏳</span> Processing ₹2 payment...`;
+      showMessage("🔄 Initiating UPI payment of ₹2 ... Please wait.", "info");
+
+      try {
+        const paymentResult = await processPaymentAndRegister(customerData);
+        if (paymentResult.success) {
+          showMessage(`✅ ${paymentResult.message} Complaint ID: ${paymentResult.complaintId}. We will contact you shortly.`, "success");
+          upiPinInput.value = "";
+          submitBtn.innerHTML = `✅ Registered ✓`;
+          submitBtn.disabled = true;
+          
+          let refreshNote = document.querySelector('.refresh-note');
+          if (!refreshNote) {
+            refreshNote = document.createElement('div');
+            refreshNote.className = "hint-text refresh-note";
+            refreshNote.style.marginTop = "12px";
+            refreshNote.style.textAlign = "center";
+            refreshNote.innerHTML = "📌 Registration successful. Refresh the page to file a new complaint.";
+            document.querySelector('.form-body').appendChild(refreshNote);
+          }
+        } else {
+          throw new Error(paymentResult.message);
+        }
+      } catch (error) {
+        console.warn("Payment error:", error);
+        let errMsg = error.message || "Payment failed. Please check UPI PIN and try again.";
+        showMessage(`⚠️ ${errMsg}`, "error");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        upiPinInput.style.borderColor = "#dc2626";
+      }
+    }
+
+    // Event listeners
+    submitBtn.addEventListener('click', handleSubmit);
+
+    const allFields = [nameInput, mobileInput, addressInput, upiPinInput];
+    allFields.forEach(field => {
+      field.addEventListener('focus', () => {
+        field.style.borderColor = '';
+      });
+    });
+
+    mobileInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9]/g, '').slice(0,10);
+    });
+    
+    upiPinInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9]/g, '').slice(0,6);
+    });
+
+    nameInput.addEventListener('blur', function() {
+      if (this.value.trim().length > 0) {
+        this.value = this.value.trim().replace(/\b\w/g, c => c.toUpperCase());
+      }
+    });
+  })();
+</script>
+</body>
+</html>
